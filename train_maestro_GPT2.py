@@ -172,8 +172,6 @@ def batch_sampler(data_source, batch_idxs, max_seq_len=1024):
 
 
 batch_pitch, batch_velo, batch_dt, batch_duration = batch_sampler(dataset, range(32), max_seq_len=512)
-# %%
-
 
 # %% Submodules for a Music Note Transformer
 class NoteReadoutHeads(nn.Module):
@@ -283,6 +281,7 @@ def tensor2midi(pitch, velo, dur, dt, savedir, filename, instrument="Acoustic Gr
 
 # %%
 import torch.nn.functional as F
+from torch.optim import AdamW
 from torch.utils.tensorboard import SummaryWriter
 saveroot = "/home/binxu/DL_Projects/Maestro-GPT" #"runs"
 
@@ -305,23 +304,27 @@ optimizer = AdamW([*model.parameters(),
                    *duration_emb.parameters(),
                    *velocity_emb.parameters(),
                    ], lr=10e-4)
-scheduler = get_linear_schedule_with_warmup(optimizer, 250, 3000)
+scheduler = get_linear_schedule_with_warmup(optimizer, 50, 3000)
 # savedir = join(saveroot, "runs_L18")
 # savedir = join(saveroot, "runs_L18_lrsched_nexttok")
-savedir = join(saveroot, "runs_L36_ctx256_lrsched_nexttok")
+# savedir = join(saveroot, "runs_L36_ctx256_lrsched_nexttok")
+savedir = join(saveroot, "runs_L36_ctx256_lrsched_nexttok_fixeval")
 os.makedirs(savedir, exist_ok=True)
 os.makedirs(join(savedir, "ckpt"), exist_ok=True)
 # %%
 save_per_epoch = 10
 synth_per_epoch = 10
 batch_size = 24
+max_seq_len = 256
 writer = SummaryWriter(savedir)
 for epoch in trange(0, 3000):
+    for module in [model, readout, dt_emb, duration_emb, velocity_emb]:
+        module.train()
     rand_idx_seq = np.random.permutation(len(dataset))
     for i, csr in enumerate(trange(0, len(dataset), batch_size)):
         batch_idxs = rand_idx_seq[csr:csr + batch_size]
         batch_pitch, batch_velo, batch_dt, batch_duration = batch_sampler(dataset,
-                                                      batch_idxs, max_seq_len=256)
+                                                      batch_idxs, max_seq_len=max_seq_len)
         pitch_embed = model.transformer.wte(batch_pitch.cuda())
         note_embed = pitch_embed + velocity_emb(batch_velo.cuda()) + \
             dt_emb(batch_dt.cuda()) + duration_emb(batch_duration.cuda())  #
@@ -365,7 +368,7 @@ for epoch in trange(0, 3000):
         prompt_ids, prompt_velos, prompt_durations, prompt_dts = notedf2tensor(note_seq[:10], device="cuda")
         pitch_gen, velo_gen, dur_gen, dt_gen = naive_greedy_decode(model,
                        prompt_ids, prompt_velos, prompt_durations, prompt_dts,
-                        temperature=.2, max_gen_tokens=240)
+                        temperature=.2, max_gen_tokens=max_seq_len - 12)
         tensor2midi(pitch_gen[0], velo_gen[0], dur_gen[0], dt_gen[0],
                     savedir, f"generated_midi_with_tempo_T02_{epoch:03d}.mid")
 #%%
