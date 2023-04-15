@@ -6,18 +6,17 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer, GPT2Config, GPT2Model
 ## import MNIST from torchvision package
 from torchvision import datasets, transforms
 ## import torch
+import os
+from os.path import join
+from tqdm import tqdm, trange
 import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.optim import AdamW, Adam
 from torch.utils.data import Dataset, DataLoader
-from tqdm import tqdm, trange
 from torchvision.utils import make_grid, save_image
 import matplotlib.pyplot as plt
-from tqdm import tqdm, trange
-from os.path import join
-import os
 #%%
 from torchvision.datasets import MNIST
 

@@ -1,12 +1,16 @@
 import math
-
-import datasets
+import numpy as np
+from tqdm import tqdm, trange
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.utils.data import DataLoader
+from torch.optim import AdamW
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, GPT2Config, GPT2Model
 from transformers import get_linear_schedule_with_warmup
+from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import random_split
+from torch.nn.utils.rnn import pad_sequence
 #%%
 from torchfsdd import TorchFSDDGenerator, TrimSilence
 from torchaudio.transforms import MFCC
@@ -29,18 +33,11 @@ train_set, test_set = fsdd.train_test_split(test_size=0.1)
 # Create three Torch datasets for a train-validation-test split from the generator
 train_set, val_set, test_set = fsdd.train_val_test_split(test_size=0.15, val_size=0.15)
 #%%
-import matplotlib.pyplot as plt
-import numpy as np
 plt.figure()
 plt.imshow(np.log(np.abs(train_set[100][0])))
 plt.show()
-#%%
-import torch
-from torch.utils.data import Dataset, DataLoader
-from torch.utils.data import random_split
-import torch
-from torch.nn.utils.rnn import pad_sequence
 
+#%%
 def collate_fn(batch):
     # batch is a list of tuples, where each tuple is (audio_tensor, label_scalar)
     audios = []
@@ -59,8 +56,7 @@ def collate_fn(batch):
 # audio_tsrs, labels = next(iter(dataloaders))
 
 #%%
-import math
-from torch.optim import AdamW
+from transformers import GPT2LMHeadModel, GPT2Tokenizer, GPT2Config, GPT2Model
 config = GPT2Config(n_embd=128, n_layer=12, n_head=16, n_positions=256,
                     vocab_size=100, bos_token_id=101, eos_token_id=102,
                     cls_token_id=103, )
@@ -74,7 +70,6 @@ optimizer = AdamW([*model.parameters(),
                   *classifier_head.parameters(),
                    CLS_token], lr=1e-4)
 #%%
-from tqdm import tqdm, trange
 
 dataloaders = DataLoader(train_set, batch_size=128, shuffle=True,
                          collate_fn=collate_fn)
@@ -135,8 +130,6 @@ optimizer = AdamW([*model.parameters(),
 # https://datasets.activeloop.ai/docs/ml/datasets/free-spoken-digit-dataset-fsdd/
 # https://github.com/adhishthite/sound-mnist
 #%%
-from tqdm import tqdm, trange
-
 dataloaders = DataLoader(train_set, batch_size=128, shuffle=True,
                          collate_fn=collate_fn)
 val_loader = DataLoader(val_set, batch_size=256, shuffle=True,
