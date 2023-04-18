@@ -48,7 +48,7 @@ for head in range(headcnt):
     plt.title(f"head {head}")
 plt.show()
 
-#%% Causal attention mask 
+#%% Causal attention mask
 attn_mask = torch.ones(token_num,token_num,)
 attn_mask = -1E4 * torch.triu(attn_mask,1)
 attn_mask
