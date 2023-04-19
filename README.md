@@ -8,7 +8,7 @@ April. 17th, 2023
 
 ![](media/AttentionSchematics_white-01.png)
 
-**Transformer Jupyter Notebook Tutorial Series ** 
+**Transformer Jupyter Notebook Tutorial Series** 
 * Fundamentals
   * [Understanding Attention & Transformer](https://colab.research.google.com/drive/1ZuhA6khlWm57WGZ8i38JH-gc5aJrvpvs?usp=sharing)
   * [Language modelling with transformer](https://colab.research.google.com/drive/1zZYzAopL__LW4glruSF9lnZYlEmSVI8j?usp=sharing)
