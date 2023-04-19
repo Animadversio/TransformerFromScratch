@@ -18,7 +18,7 @@ April. 17th, 2023
   * **All the following notebooks include training transformer, shall be run with GPU runtime or the training takes too long.**
   * [Learn to do arithmetics by sequence modelling.](https://colab.research.google.com/drive/1vO71-o-8-3IrOe44Ha0nsHmUsEGVSC37?usp=sharing) (Simple, GPU Training ~ 5 min)
   * [Image generation by sequence modelling.](https://colab.research.google.com/drive/1UHlEbepqdvk68cYV1fvkmWl2TBKXfm8E?usp=sharing) (Simple, GPU Training ~ 10 ~ 20 min)
-  * [Audio signal classification](https://colab.research.google.com/drive/1O4XHOJyOu3_lyaPHAKJM_XTztrAb7VFP?usp=sharing) (Medium, GPU Training ~  20 min)
+  * ~~[Audio signal classification](https://colab.research.google.com/drive/1O4XHOJyOu3_lyaPHAKJM_XTztrAb7VFP?usp=sharing) (Medium, GPU Training ~  20 min)~~ (WARNING: currently, there is a dependency install error, don't run on Colab.) 
   * [Image classification](https://colab.research.google.com/drive/1JDQQlLMGzo675AfrtkFn1kbuADtVemJz?usp=sharing) (Medium, GPU Training ~  30 min)
   * [Music generation by sequence modelling.](https://colab.research.google.com/drive/14zpzLpR4UBIzEQmeaXlMv_mDFYIv3Vht?usp=sharing) (Difficult, GPU Training takes hrs)
 * Large Language Model
