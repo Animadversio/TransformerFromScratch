@@ -4,6 +4,8 @@ Binxu Wang (binxu_wang@hms.harvard.edu)
 
 April. 17th, 2023
 
+[Tutorial website](https://scholar.harvard.edu/binxuw/classes/machine-learning-scratch/materials/transformers) 
+
 [Lecture slides (PDF)](https://scholar.harvard.edu/sites/scholar.harvard.edu/files/binxuw/files/mlfs_tutorial_nlp_transformer_ssl_updated.pdf)
 
 ![](media/AttentionSchematics_white-01.png)
